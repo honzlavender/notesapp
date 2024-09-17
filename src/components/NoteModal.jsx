@@ -15,6 +15,8 @@ const NoteModal = ({
   title,
   setTitle,
   body,
+  errorMessage,
+  setErrorMessage,
   setBody,
   handleCancel,
 }) => {
@@ -30,26 +32,60 @@ const NoteModal = ({
             placeholder="title."
             style={styles.input}
             value={title}
-            onChangeText={text => setTitle(text)}
+            onChangeText={text => {
+              setTitle(text);
+              setErrorMessage('');
+            }}
           />
+          {errorMessage && (
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
+          )}
           <TextInput
-            placeholder="body."
+            placeholder={errorMessage ? '' : 'body.'}
             style={styles.bodyInput}
             value={body}
             multiline
             editable
             numberOfLines={6}
-            onChangeText={text => setBody(text)}
+            onChangeText={text => {
+              setBody(text);
+              setErrorMessage('');
+            }}
           />
         </View>
         <View style={styles.modalButtonContainer}>
           <Pressable
-            style={{borderRightWidth: 2, borderColor: '#acaec6'}}
-            onPress={handleCancel}>
-            <Text style={styles.buttonText}>Cancel</Text>
+            onPress={handleCancel}
+            style={({pressed}) => [
+              {
+                borderRightWidth: 2,
+                borderColor: '#acaec6',
+              },
+            ]}>
+            {({pressed}) => (
+              <Text
+                style={[
+                  {
+                    color: pressed ? '#acaec6' : '#3c3e5f',
+                  },
+                  styles.buttonText,
+                ]}>
+                Cancel
+              </Text>
+            )}
           </Pressable>
-          <Pressable style={styles.buttons} onPress={handleSaveNote}>
-            <Text style={styles.buttonText}>Save</Text>
+          <Pressable onPress={handleSaveNote}>
+            {({pressed}) => (
+              <Text
+                style={[
+                  {
+                    color: pressed ? '#acaec6' : '#3c3e5f',
+                  },
+                  styles.buttonText,
+                ]}>
+                Save
+              </Text>
+            )}
           </Pressable>
         </View>
       </View>
@@ -86,11 +122,16 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonText: {
-    color: '#3c3e5f',
     fontWeight: 'bold',
     fontSize: 18,
     padding: 8,
     marginHorizontal: 50,
+  },
+  errorMessage: {
+    color: 'brown',
+    fontWeight: 'bold',
+    fontSize: 10,
+    margin: 10,
   },
 });
 

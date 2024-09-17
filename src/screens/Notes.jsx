@@ -13,8 +13,9 @@ const Notes = () => {
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [notes, setNotes] = useState([]);
-  const [editing, setEditing] = useState(false); // To track if in edit mode
+  const [editing, setEditing] = useState(false);
   const [currentNoteId, setCurrentNoteId] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const loadNotes = async () => {
     try {
@@ -61,9 +62,12 @@ const Notes = () => {
         setBody('');
         setModalVisible(false);
         setCurrentNoteId(null);
+        setErrorMessage('');
       } catch (error) {
         console.error('Error saving note:', error);
       }
+    } else {
+      setErrorMessage('please add title & body :)');
     }
   };
 
@@ -81,6 +85,7 @@ const Notes = () => {
     setBody('');
     setEditing(false);
     setCurrentNoteId(null);
+    setErrorMessage('');
   };
 
   return (
@@ -96,8 +101,21 @@ const Notes = () => {
                 'YYYY-MM-DD HH:mm:ss Z',
               ).format('M/D/YY h:mma');
               return (
-                <Pressable onPress={() => handleEditNote(item)}>
-                  <View style={styles.noteItem}>
+                <Pressable
+                  onPress={() => handleEditNote(item)}
+                  style={({pressed}) => [
+                    {
+                      backgroundColor: pressed ? '#acaec6' : '#eccd8f',
+                    },
+                    styles.noteItem,
+                  ]}>
+                  <View
+                    style={({pressed}) => [
+                      {
+                        backgroundColor: pressed ? '#acaec6' : '#eccd8f',
+                      },
+                      styles.noteItem,
+                    ]}>
                     <View style={styles.noteRow}>
                       <Text style={styles.noteTitle}>{item.title}</Text>
                       <Text style={styles.noteTimestamp}>
@@ -126,6 +144,8 @@ const Notes = () => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         handleSaveNote={handleSaveNote}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
       />
     </View>
   );
@@ -149,7 +169,7 @@ const styles = StyleSheet.create({
   noteItem: {
     marginBottom: 8,
     marginHorizontal: 24,
-    backgroundColor: '#eccd8f',
+    // backgroundColor: '#eccd8f',
     padding: 12,
     borderRadius: 8,
   },
