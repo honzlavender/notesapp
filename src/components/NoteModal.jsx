@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Modal,
   View,
@@ -53,8 +53,6 @@ const NoteModal = ({
                 style={styles.bodyInput}
                 value={body}
                 multiline
-                editable
-                numberOfLines={6}
                 onChangeText={text => {
                   setBody(text);
                   setErrorMessage('');
@@ -125,6 +123,7 @@ const styles = StyleSheet.create({
   },
   bodyInput: {
     padding: 10,
+    height: 200,
   },
   modalButtonContainer: {
     flexDirection: 'row',

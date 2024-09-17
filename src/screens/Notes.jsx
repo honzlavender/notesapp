@@ -169,7 +169,6 @@ const styles = StyleSheet.create({
   noteItem: {
     marginBottom: 8,
     marginHorizontal: 24,
-    // backgroundColor: '#eccd8f',
     padding: 12,
     borderRadius: 8,
   },
